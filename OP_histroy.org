@@ -17,4 +17,6 @@
 ** beautiful soup
 ** requests
 ** lxml  
-  
+* 对比
+http://www.xinfadi.com.cn/marketanalysis/0/list/8758.shtml 尾页
+http://www.xinfadi.com.cn/marketanalysis/0/list/1.shtml    首页
