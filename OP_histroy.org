@@ -18,5 +18,72 @@
 ** requests
 ** lxml  
 * 对比
-http://www.xinfadi.com.cn/marketanalysis/0/list/8758.shtml 尾页
-http://www.xinfadi.com.cn/marketanalysis/0/list/1.shtml    首页
+  http://www.xinfadi.com.cn/marketanalysis/0/list/8758.shtml 尾页
+
+  http://www.xinfadi.com.cn/marketanalysis/0/list/1.shtml    首页
+  
+  从对比结果来看，只有最后的页码不同
+* 数据库配置
+  采用mysql数据库，数据库的格式需要确定一下。
+  最简单的方式是直接存储，后续分析,精确点的方式是每种货物都单独分类。
+* 数据库操作日志 
+  #+BEGIN_SRC sql
+  /* 分隔符更改为 ; */
+  /* 连接到 127.0.0.1 （经由 MySQL (TCP/IP)），用户名 root，密码：No ... */
+  USE `goods_db`;
+
+  CREATE TABLE `goods_info` (
+    `ID` INT(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT '货物ID',
+    `GoodsName` VARCHAR(50) NOT NULL COMMENT '货物名称' COLLATE 'utf8_bin',
+    `Minivalence` DECIMAL(10,2) NOT NULL COMMENT '最低价',
+    `MiddlePrice` DECIMAL(10,2) NOT NULL COMMENT '平均价',
+    `HighestPrice` DECIMAL(10,2) NOT NULL COMMENT '最高价',
+    `Specification` VARCHAR(10) NOT NULL COMMENT '规格' COLLATE 'utf8_bin',
+    `Unit` VARCHAR(10) NULL DEFAULT NULL COMMENT '单位' COLLATE 'utf8_bin',
+    `DataTime` DATE NULL DEFAULT NULL COMMENT '时间',
+    PRIMARY KEY (`ID`) /*ID 作为主键*/
+  )
+  COMMENT='jichu biao '
+  COLLATE='utf8_bin'
+  ENGINE=MyISAM
+  AUTO_INCREMENT=4
+  ;
+  #+END_SRC
+* 出错修改 
+** python mysqldb 导入报错
+   由于采用的是python 2.7 64位版本，导致安装的mysqldb 执行报错，缺少各种模块，解决的方案是本地下载 MySQL-python 1.2.5，进行手动安装
+   参考链接是：
+   http://www.linuxfly.org/windows_install_mysql_python_library/
+    在Windows 下调试 Python 还是挺麻烦的。通过PyCharm 来安装个MySQL-python 的库都搞了大半天。分别尝试 1.2.3、1.2.4 和 1.2.5 都有不同的错误。+_+
+    最后确定还是在 1.2.5 版本下来解决，需要解决的问题就是这个：
+    “Cannot open include file: 'config-win.h': No such file or directory” while installing mysql-python
+    上面是在 1.2.4 版本上的，后来在 1.2.5 上面应该是解决的。但实际上，1.2.5 在Windows 64 位环境下还是有问题的，原因见后面的说明。
+    安装步骤如下：
+    1.安装 Microsoft Visual C++ Compiler Package for Python 2.7
+    [[http://www.microsoft.com/en-us/download/details.aspx?id=44266][download link]]
+    2.安装 MySQL Connector C 6.0.2
+    [[https://dev.mysql.com/downloads/connector/c/6.0.html][download link]]
+    3.下载 MySQL-python 1.2.5 源码包
+   [[https://pypi.python.org/packages/source/M/MySQL-python/MySQL-python-1.2.5.zip][ download link]]
+    4.解压源码包后，修改 site.cfg 文件。
+    实际上，如果你是在32 位系统上部署，那么通过pip install 安装MySQL-python 1.2.5 只需进行上面的依赖包安装即可。
+    但在 64 位环境中，就会提示“Cannot open include file: 'config-win.h'” 的错误。
+    原因就是 site.cfg 中写的 MySQL Connector C 为32 位版本。
+    原来的 site.cfg 文件内容如下：
+    引用
+    # http://stackoverflow.com/questions/1972259/mysql-python-install-problem-using-virtualenv-windows-pip
+    # Windows connector libs for MySQL. You need a 32-bit connector for your 32-bit Python build.
+    #+BEGIN_CENTER
+     connector = C:\Program Files (x86)\MySQL\MySQL Connector C 6.0.2
+    #+END_CENTER
+    修改为：
+    引用
+    #+BEGIN_SRC 
+     connector = C:\Program Files\MySQL\MySQL Connector C 6.0.2
+    #+END_SRC
+    5.运行 python setup.py install 即可安装完成。
+* 参考信息
+** python 操作数据库 
+   http://www.cnblogs.com/rollenholt/archive/2012/05/29/2524327.html
+
+   

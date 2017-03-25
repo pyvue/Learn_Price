@@ -13,6 +13,9 @@ middle_url  = '/marketanalysis/0/list/'
 last_name = ".shtml"
 #soup = BeautifulSoup(html_doc,'html_parser')
 
+# todo 添加日志记录模块，用以排查出现的问题
+# todo 添加异常处理模块，网络链接出现问题的时候，自动进行任务，无人职守才行。
+
 '''
 获取有多少页
 '''
@@ -55,19 +58,21 @@ def get_gs_page_number():
 
 
 def get_goods_info():
+    goods_info = open('goods_info.txt','ab+') #货物信息保存的文件
     number = get_gs_page_number()
     print "统计出页数是：" + number.__str__()
 
-    for i in range(1,number):
+    for i in range(2054,number):
+    #for i in range(1, 10):
         get_url= host + middle_url + i.__str__() + last_name
         print get_url
         #time.sleep(10) # 暂停10秒钟
-        for m in range(0,9):
+        for m in range(0,5):
             time.sleep(1)
-            print '暂停中: ' + (10-m).__str__()
+            print '暂停中: ' + (5-m).__str__()
 
         r = requests.get(get_url)
-        soup = BeautifulSoup(r.content, 'lxml')
+        soup = BeautifulSoup(r.content, 'lxml') #解析网页
 
         '''
          查找所有的tag，并列出,这部分挺重要
@@ -80,7 +85,11 @@ def get_goods_info():
         print len(soup.find_all('td'))
         for table_d in soup.find_all('td')[16:176]:
             print table_d.text
+            goods_info.write((table_d.text).encode('utf-8')) #写入到文件中
+            goods_info.write('\n')
 
+    goods_info.close() #  爬取完毕，关闭文件
+    print "爬取结束。。。。"
 if __name__ == "__main__":
     get_goods_info()
     print "main function"
