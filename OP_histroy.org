@@ -17,6 +17,7 @@
 ** beautiful soup
 ** requests
 ** lxml  
+** mysqldb
 * 对比
   http://www.xinfadi.com.cn/marketanalysis/0/list/8758.shtml 尾页
 
@@ -85,5 +86,7 @@
 * 参考信息
 ** python 操作数据库 
    http://www.cnblogs.com/rollenholt/archive/2012/05/29/2524327.html
-
+** python 连接字符串 
+   http://www.cnblogs.com/adc8868/p/5805258.html
+** 
    

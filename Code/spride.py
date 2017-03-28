@@ -15,6 +15,9 @@ last_name = ".shtml"
 
 # todo 添加日志记录模块，用以排查出现的问题
 # todo 添加异常处理模块，网络链接出现问题的时候，自动进行任务，无人职守才行。
+# todo 添加数据库处理模块
+# todo 准备爬取蔬菜价格信息
+# todo 解决数据编码问题
 
 '''
 获取有多少页
@@ -22,7 +25,7 @@ last_name = ".shtml"
 
 
 def get_gs_page_number():
-    r = requests.get('http://www.xinfadi.com.cn/marketanalysis/0/list/1.shtml')
+    r = requests.get('http://www.xinfadi.com.cn/marketanalysis/1/list/1.shtml')
     soup= BeautifulSoup(r.content,'lxml')
     #print soup.find_all('a')
     #number = soup.find_all('a')[54:55] # 这个值是固定的，一段时间内是不太会改变
@@ -58,9 +61,9 @@ def get_gs_page_number():
 
 
 def get_goods_info():
-    goods_info = open('goods_info.txt','ab+') #货物信息保存的文件
+    goods_info = open('vegetables_info.txt','ab+') #货物信息保存的文件
     number = get_gs_page_number()
-    print "统计出页数是：" + number.__str__()
+    print "统计出页数是：".decode("gbk2312") + number.__str__()
 
     for i in range(7506,number):
     #for i in range(1, 10):

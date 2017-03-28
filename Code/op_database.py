@@ -17,14 +17,18 @@ def db_insert():
         conn.set_character_set('utf8')
         cur = conn.cursor()
         #cur.execute('select * from goods_info')
+        '''
+        构造信息的列表
+        '''
         goods_info = ["'小白菜'", "'14.00'", "'12.13'", "'14.16'", "'普通'", "'斤'", "'2017-03-11'"]
-        #sql = pre_sql.join(goods_info[0])
-        pre_sql = 'cur.execute("insert into  `goods_db`.`goods_info`(`GoodsName`, `Minivalence`, `MiddlePrice`, `HighestPrice`, `Specification`, `Unit`, `DataTime`) VALUES ( '
-        pre_sql.join(("%s","%.2f")%(goods_info))
-        print pre_sql
-        print  "aaaa %s" % goods_info[0]
+        '''
+        拼接sql字符串
+        '''
+        sql = """INSERT INTO `goods_db`.`goods_info` (`GoodsName`, `Minivalence`, `MiddlePrice`, `HighestPrice`, `Specification`, `Unit`, `DataTime`) VALUES ({}, {}, {}, {}, {}, {}, {});"""
+        sql = sql.format(goods_info[0],goods_info[1],goods_info[2],goods_info[3],goods_info[4],goods_info[5],goods_info[6])
+        print sql
         #cur.execute("INSERT INTO `goods_db`.`goods_info` (`GoodsName`, `Minivalence`, `MiddlePrice`, `HighestPrice`, `Specification`, `Unit`, `DataTime`) VALUES ('小白菜', '14.00', '12.13', '14.16', '普通', '斤', '2017-03-21');")
-        #cur.execute(sql)
+        cur.execute(sql)
 
         cur.close()
         conn.commit()
