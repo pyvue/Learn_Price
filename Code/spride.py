@@ -62,7 +62,7 @@ def get_goods_info():
     number = get_gs_page_number()
     print "统计出页数是：" + number.__str__()
 
-    for i in range(2054,number):
+    for i in range(7506,number):
     #for i in range(1, 10):
         get_url= host + middle_url + i.__str__() + last_name
         print get_url
