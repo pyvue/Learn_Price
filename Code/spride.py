@@ -86,14 +86,13 @@ def get_gs_page_number():
 
 
 def get_goods_info():
-    goods_info = open('vegetables_info.txt','ab+') #货物信息保存的文件
+    goods_info = open('vegetables_info.txt' , 'ab+') #货物信息保存的文件
     number = get_gs_page_number()
     print sys.getdefaultencoding()
     print "统计出页数是：".encode("gbk") + number.__str__()
 
-    for i in range(0,number):
-    #for i in range(1, 10):
-        get_url= host + middle_uri + i.__str__() + last_name
+    for i in range(0, number):
+        get_url = host + middle_uri + i.__str__() + last_name
         print get_url
         logging.warning(get_url)
         #time.sleep(10) # 暂停10秒钟
