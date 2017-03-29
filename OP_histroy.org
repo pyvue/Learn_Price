@@ -11,7 +11,7 @@
 * 目的
   1. 每个月蔬菜最高价是什么？
   2. 一年中，种什么蔬菜最赚钱
-  3. 
+  3. 什么季节吃什么水果最便宜
 * 使用方案
 ** python 2.7.11
 ** beautiful soup
@@ -88,5 +88,14 @@
    http://www.cnblogs.com/rollenholt/archive/2012/05/29/2524327.html
 ** python 连接字符串 
    http://www.cnblogs.com/adc8868/p/5805258.html
-** 
-   
+** python logging 日志处理模块
+   http://www.cnblogs.com/dkblog/archive/2011/08/26/2155018.html
+** Windows下使用Redis（一）安装使用
+   http://www.cnblogs.com/panchunting/p/Redis_On_Windows_Install.html
+* todo
+** DONE 添加日志记录模块，用以排查出现的问题
+** DONE 添加异常处理模块，网络链接出现问题的时候，自动进行任务，无人职守才行。
+** DONE 添加数据库处理模块
+** TODO 准备爬取蔬菜价格信息
+** TODO 解决数据编码问题  半解决，还是有很多不明白的地方，python编码是一个坑
+** TODO 添加数据库去重代码
