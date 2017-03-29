@@ -8,6 +8,8 @@ import re
 from bs4 import BeautifulSoup
 import logging
 
+from urllib3 import exceptions as ex
+
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -35,7 +37,7 @@ last_name = ".shtml"
 # todo 准备爬取蔬菜价格信息 done
 # todo 解决数据编码问题  半解决，还是有很多不明白的地方，python编码是一个坑
 # todo 编写查询数据库的功能代码
-
+# todo 编写定时脚本，自动处理新增加的数据
 '''
 bug 
 '''
@@ -88,7 +90,8 @@ def get_gs_page_number():
 def get_goods_info():
     goods_info = open('vegetables_info.txt' , 'ab+') #货物信息保存的文件
     number = get_gs_page_number()
-    print sys.getdefaultencoding()
+    #print sys.getdefaultencoding()
+
     print "统计出页数是：".encode("gbk") + number.__str__()
 
     for i in range(0, number):
@@ -126,16 +129,78 @@ def get_goods_info():
 
     goods_info.close() #  爬取完毕，关闭文件
     print "爬取结束。。。。".encode("gbk")
+
+
+def get_goods_info_fix():
+    goods_info = open('vegetables_info.txt' , 'ab+') #货物信息保存的文件
+    #number = get_gs_page_number()
+    #print sys.getdefaultencoding()
+
+    #print "统计出页数是：".encode("gbk") + number.__str__()
+
+    #for i in range(0, number):
+    #    get_url = host + middle_uri + i.__str__() + last_name
+    get_url = "http://xinfadi.com.cn/marketanalysis/5/list/122.shtml"
+    print get_url
+    logging.warning(get_url)
+    #time.sleep(10) # 暂停10秒钟
+    '''
+        考虑缩短暂停时间
+    '''
+
+    time.sleep(1)
+    try :
+        r = requests.get(get_url)
+    except ex.MaxRetryError,e:
+        print "    ex.MaxRetryError: "
+        print e.message
+        logging.info(e.message)
+        raise ex.MaxRetryError
+    except requests.ConnectionError,e:
+        #logging.warning(e.message)
+        #print  e.message
+        #print  e.args
+        raise requests.ConnectionError
+    except requests.HTTPError,e:
+        print e.request
+    #except Exception,e :
+    #    print e.args
+    #    print e.message
+    #    logging.warning(e.args)
+    else:
+        soup = BeautifulSoup(r.content, 'lxml') #解析网页
+    '''
+         查找所有的tag，并列出,这部分挺重要
+    '''
+        #for tag in soup.find_all(True):
+        #    print(tag.name)
+
+        #table_con = soup.find_all('table')[1:2]
+        #print table_con
+    print len(soup.find_all('td'))
+    for table_d in soup.find_all('td')[16:176]:
+        print table_d.text
+        goods_info.write((table_d.text).encode('utf-8')) #写入到文件中
+        goods_info.write('\n')
+
+    goods_info.close() #  爬取完毕，关闭文件
+    print "爬取结束。。。。".encode("gbk")
+
+
 if __name__ == "__main__":
     '''
     添加异常处理
     '''
 # todo 异常模块需要重新写
     try:
-        get_goods_info()
-    except Exception ,e:
-        logging.warning(e.args)
+        get_goods_info_fix()
+    except requests.ConnectionError ,e:
+        logging.warning(e.message)
+        logging.info("出现了错误，重试ing.......")
+    except ex.MaxRetryError,e:
+        print e.message
+        print "请求超时"
     finally:
-        get_goods_info()
+        print "爬取完毕".encode("gbk")
     print "main function"
 

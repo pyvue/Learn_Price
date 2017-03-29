@@ -92,6 +92,10 @@
    http://www.cnblogs.com/dkblog/archive/2011/08/26/2155018.html
 ** Windows下使用Redis（一）安装使用
    http://www.cnblogs.com/panchunting/p/Redis_On_Windows_Install.html
+** Python学习（41）：爬虫：异常处理
+   https://www.zybuluo.com/kingwhite/note/152682
+** Python爬虫学习系列教程
+   https://zhuanlan.zhihu.com/p/25949099
 * todo
 ** DONE 添加日志记录模块，用以排查出现的问题
 ** DONE 添加异常处理模块，网络链接出现问题的时候，自动进行任务，无人职守才行。
